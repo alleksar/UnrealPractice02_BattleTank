@@ -53,7 +53,8 @@ Binaries/*
 
 # Builds
 Build/*
-
+# Content
+Content/StarterContent
 # Whitelist PakBlacklist-<BuildConfiguration>.txt files
 !Build/*/
 Build/*/**
