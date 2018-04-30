@@ -1,8 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Done by Aleksa Raicevic
 
 
 #include "../Public/TankAIController.h"
 
+ATankAIController::ATankAIController()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -28,6 +32,19 @@ void ATankAIController::BeginPlay()
 	
 }
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (GetPlayerTank())
+	{
+		//TODO Move towards player
+		AimAtPlayer();
+		//TODO Fire if ready
+	}
+	
+
+}
+
 ATank * ATankAIController::GetPlayerTank() const
 {
 	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
@@ -36,4 +53,10 @@ ATank * ATankAIController::GetPlayerTank() const
 ATank* ATankAIController::GetControlledAITank() const
 {
 	return Cast<ATank>(GetPawn());
+}
+
+void ATankAIController::AimAtPlayer()
+{
+	FVector PlayerTankPosition = GetPlayerTank()->GetActorLocation();
+	GetControlledAITank()->AimAt(PlayerTankPosition);
 }

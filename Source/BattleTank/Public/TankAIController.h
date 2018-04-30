@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Done by Aleksa Raicevic
 
 #pragma once
 
@@ -16,9 +16,12 @@ class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
 private:
+	ATankAIController();
 	ATank* GetControlledAITank() const;
 	virtual void BeginPlay() override;
+	virtual void Tick(float) override;
 	ATank* GetPlayerTank() const;
+	void AimAtPlayer();
 	
 	
 	

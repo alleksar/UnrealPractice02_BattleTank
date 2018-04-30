@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+//  Done by Aleksa Raicevic
 
 #include "BattleTank.h"
 #include "Modules/ModuleManager.h"
