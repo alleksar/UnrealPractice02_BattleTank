@@ -1,5 +1,7 @@
 // Done by Aleksa Raicevic
 #include "TankPlayerController.h"
+#include "Public/Tank.h"
+
 
 #define OUT
 
@@ -60,7 +62,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, OUT LookDirection)) {
 		GetLookVectorHitLocation(LookDirection, OUT HitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString()); 
+		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString()); 
 		return true;
 	}
 	else {

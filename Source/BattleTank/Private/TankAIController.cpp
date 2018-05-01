@@ -1,7 +1,7 @@
 // Done by Aleksa Raicevic
-
-
 #include "../Public/TankAIController.h"
+#include "../Public/Tank.h"
+
 
 ATankAIController::ATankAIController()
 {
