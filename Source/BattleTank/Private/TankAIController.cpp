@@ -10,7 +10,6 @@ ATankAIController::ATankAIController()
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Tank AI Controller - Begin Play"))
 
 	ATank *Possesed = GetControlledAITank();
 	if (Possesed == nullptr)
@@ -38,8 +37,9 @@ void ATankAIController::Tick(float DeltaTime)
 	if (GetPlayerTank())
 	{
 		//TODO Move towards player
-		AimAtPlayer();
-		//TODO Fire if ready
+		MoveToActor(GetPlayerTank(), AcceptanceRadius);
+		AimAtPlayer(); //points barrel and turret at our tank
+		GetControlledAITank()->Fire(); //shoot at us when ready
 	}
 	
 

@@ -1,8 +1,13 @@
 // Done by Aleksa Raicevic
 #include "../Public/Tank.h"
+#include "../Public/TankBarrel.h"
+#include "../Public/Projectile.h"
 #include "../Public/TankAimingComponent.h"
+#include "../Public/TankMovementComponent.h"
+#include "Engine/World.h"
 
 
+class UProjectileMovementComponent;
 
 // Sets default values
 ATank::ATank()
@@ -11,6 +16,7 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	
 
 }
 
@@ -37,6 +43,7 @@ void ATank::SetBarrelReference(UTankBarrel *BarrelToSet)
 {
 	if (!BarrelToSet) { return; }
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
 void ATank::SetTurretReference(UTankTurret *TurretToSet)
@@ -47,6 +54,19 @@ void ATank::SetTurretReference(UTankTurret *TurretToSet)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire!"))
+	bool isRealoaded = (FPlatformTime::Seconds() - LastFireTime) > RealoadTime;
+
+	if (Barrel && isRealoaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Barrel->GetSocketLocation(FName("Projectile")), Barrel->GetSocketRotation(FName("Projectile")));
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+		
+	}
+	else {
+		return;
+	}
+		
+	
 }
 
