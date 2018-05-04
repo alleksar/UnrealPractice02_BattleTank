@@ -1,6 +1,6 @@
 // Done by Aleksa Raicevic
 #include "../Public/TankAIController.h"
-#include "../Public/Tank.h"
+#include "../Public/TankAimingComponent.h"
 
 
 ATankAIController::ATankAIController()
@@ -10,53 +10,17 @@ ATankAIController::ATankAIController()
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ATank *Possesed = GetControlledAITank();
-	if (Possesed == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank AI Controller  - You are not posessing a tank"))
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Tank AI Controller - You are posessing a %s"), *(Possesed->GetName()))
-	}
-
-	ATank *PlayerTank = GetPlayerTank();
-	if (PlayerTank == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player tank not found"))
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Player tank is %s"), *(PlayerTank->GetName()))
-	}
-	
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GetPlayerTank())
-	{
-		//TODO Move towards player
-		MoveToActor(GetPlayerTank(), AcceptanceRadius);
-		AimAtPlayer(); //points barrel and turret at our tank
-		GetControlledAITank()->Fire(); //shoot at us when ready
-	}
-	
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	auto ControlledAITank = GetPawn();
+	if (!ensure(PlayerTank && ControlledAITank)) { return; }
 
-}
-
-ATank * ATankAIController::GetPlayerTank() const
-{
-	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-}
-
-ATank* ATankAIController::GetControlledAITank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-void ATankAIController::AimAtPlayer()
-{
-	FVector PlayerTankPosition = GetPlayerTank()->GetActorLocation();
-	GetControlledAITank()->AimAt(PlayerTankPosition);
+	MoveToActor(PlayerTank, AcceptanceRadius);
+	auto AimComponent = ControlledAITank->FindComponentByClass<UTankAimingComponent>();
+	AimComponent->AimAt(PlayerTank->GetActorLocation()); //points barrel and turret at our tank
+	AimComponent->Fire(); //shoot at us when ready
 }

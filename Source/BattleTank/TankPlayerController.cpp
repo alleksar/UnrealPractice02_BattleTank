@@ -1,6 +1,7 @@
 // Done by Aleksa Raicevic
 #include "TankPlayerController.h"
-#include "Public/Tank.h"
+#include "../Public/TankAimingComponent.h"
+
 
 
 #define OUT
@@ -16,15 +17,9 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller - Begin Play"))
-
-	ATank *Possesed = GetControlledTank();
-	if (Possesed == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller - You are not posessing a tank"))
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller - You are posessing a %s"), *(Possesed->GetName()))
-	}
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -33,20 +28,18 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; } 
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+	FoundAimingComponent(AimingComponent);
 
 	FVector HitLocation; //Location Where our Tank is aiming at 
 
 	if (GetSightRayHitLocation(OUT HitLocation))
 	{	
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 		//TODO Make the tank barrel and turret aim at this point
 	}
 	
