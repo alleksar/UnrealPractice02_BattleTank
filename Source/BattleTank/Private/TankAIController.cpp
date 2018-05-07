@@ -22,5 +22,10 @@ void ATankAIController::Tick(float DeltaTime)
 	MoveToActor(PlayerTank, AcceptanceRadius);
 	auto AimComponent = ControlledAITank->FindComponentByClass<UTankAimingComponent>();
 	AimComponent->AimAt(PlayerTank->GetActorLocation()); //points barrel and turret at our tank
-	AimComponent->Fire(); //shoot at us when ready
+
+	if (AimComponent->GetFiringState() == EFiringState::Locked)
+	{
+		AimComponent->Fire(); //shoot at us when ready and locked
+	}
+	
 }

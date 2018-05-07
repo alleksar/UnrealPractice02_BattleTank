@@ -31,16 +31,17 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
+	if (!GetPawn()) { return; } // if not possesing
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
 
-	FVector HitLocation; //Location Where our Tank is aiming at 
+	FVector HitLocation; //Location in the 3D world where our Tank is aiming at 
 
 	if (GetSightRayHitLocation(OUT HitLocation))
 	{	
 		AimingComponent->AimAt(HitLocation);
-		//TODO Make the tank barrel and turret aim at this point
+		
 	}
 	
 }
@@ -53,12 +54,13 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector &HitLocation) const
 	auto ScreenLocation = FVector2D(ViewportSizeX * CrosshairLocationX, ViewportSizeY * CrosshairLocationY); //Screen Location of our Crosshair
 	
 	FVector LookDirection;
-	if (GetLookDirection(ScreenLocation, OUT LookDirection)) {
-		GetLookVectorHitLocation(LookDirection, OUT HitLocation);
-		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString()); 
-		return true;
+	if (GetLookDirection(ScreenLocation, OUT LookDirection)) 
+	{
+		return GetLookVectorHitLocation(LookDirection, OUT HitLocation);
+		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *LookDirection.ToString()); 	
 	}
-	else {
+	else 
+	{
 		return false;
 	}
 	

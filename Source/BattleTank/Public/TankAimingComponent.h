@@ -14,7 +14,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -34,7 +35,9 @@ public:
 	void Fire();
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
-
+	EFiringState GetFiringState() const;
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int32 GetRoundsLeft()const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
@@ -42,6 +45,9 @@ protected:
 private:
 	UTankAimingComponent();
 	void MoveBarrelTowards(FVector);
+	bool IsBarrelMoving();
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick Type, FActorComponentTickFunction* ThisTickFunction) override;
 	UTankBarrel *Barrel = nullptr;
 	UTankTurret *Turret = nullptr;
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -50,7 +56,10 @@ private:
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float RealoadTime = 3.0f;
-	double LastFireTime = 0;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int32 RoundsLeft = 3;
+	double LastFireTime = 0;	
+	FVector AimDirection;
 
 		
 	
