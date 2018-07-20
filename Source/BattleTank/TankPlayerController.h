@@ -27,7 +27,11 @@ private:
 	bool GetSightRayHitLocation(FVector &) const;
 	bool GetLookDirection(FVector2D, FVector &) const;
 	bool GetLookVectorHitLocation(FVector, FVector &) const;
-
+	virtual void SetPawn(APawn* InPawn) override;
+	UFUNCTION()
+	void OnPossess(APawn* PossessedPawn);
+	UFUNCTION()
+	void OnPlayerTankDeath();
 	UPROPERTY(EditAnywhere)
 	float CrosshairLocationX = 0.5f; //crosshair X coordinate is on the center of the screen
 	UPROPERTY(EditAnywhere)

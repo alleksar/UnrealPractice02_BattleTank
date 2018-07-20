@@ -23,7 +23,12 @@ protected:
 private:
 	ATankAIController();
 	virtual void BeginPlay() override;
+	virtual void SetPawn(APawn* InPawn) override;
 	virtual void Tick(float) override;
+	UFUNCTION(BlueprintCallable, Category = "Check")
+	bool PlayerTankAtSight();
+	UFUNCTION()
+	void OnPossesedTankDeath();
 	
 	
 	

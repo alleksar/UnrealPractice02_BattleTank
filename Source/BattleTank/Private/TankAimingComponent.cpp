@@ -62,7 +62,7 @@ bool UTankAimingComponent::IsBarrelMoving()
 
 	auto BarrelForward = Barrel->GetForwardVector();
 
-	return !BarrelForward.Equals(AimDirection, 0.01);
+	return !BarrelForward.Equals(AimDirection, 0.03);
 
 }
 

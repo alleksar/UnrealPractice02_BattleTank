@@ -18,5 +18,4 @@ private:
 	float MaxDegreesPerSeconds = 15.0f;
 	
 	
-	
 };
