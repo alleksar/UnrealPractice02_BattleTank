@@ -18,6 +18,7 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Tank Player Controller - Begin Play"))
+	if (!GetPawn()) return;
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
@@ -48,7 +49,7 @@ void ATankPlayerController::OnPossess(APawn * PossessedPawn)
 
 void ATankPlayerController::OnPlayerTankDeath()
 {
-	StartSpectatingOnly();
+	//StartSpectatingOnly();
 }
 
 
